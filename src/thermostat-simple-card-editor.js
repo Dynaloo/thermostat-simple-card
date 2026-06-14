@@ -69,12 +69,14 @@ export class ThermostatSimpleCardEditor extends LitElement {
     if (JSON.stringify(this._config) === JSON.stringify(newConfig)) return;
     this._config = newConfig;
 
-    const event = new CustomEvent("config-changed", {
-      detail: { config: this._config },
-      bubbles: true,
-      composed: true,
-    });
-    this.dispatchEvent(event);
+    // Utilisation d'un événement standard Lovelace pour enregistrer la configuration
+    this.dispatchEvent(
+      new CustomEvent("config-changed", {
+        detail: { config: this._config },
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 }
 
