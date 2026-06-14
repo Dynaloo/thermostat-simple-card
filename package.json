@@ -1,6 +1,7 @@
 {
   "name": "thermostat-simple-card",
   "version": "1.0.0",
+  "type": "module",
   "description": "Thermostat card for Home Assistant",
   "scripts": {
     "build": "rollup -c"
