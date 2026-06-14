@@ -7,31 +7,31 @@ on:
 jobs:
   upload:
     runs-on: ubuntu-latest
+    # --- AJOUTER LES LIGNES CI-DESSOUS ---
+    permissions:
+      contents: write # Permet au script d'ajouter des fichiers aux releases
+    # -------------------------------------
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Configuration de l'environnement Node.js requis pour compiler
       - name: Setup Node.js
         uses: actions/actions-setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm' # Optimise le temps de build en mettant le cache npm en mémoire
+          cache: 'npm'
 
-      # 2. Installation des dépendances (Rollup et plugins définis dans package.json)
       - name: Install dependencies
-        run: npm ci # "npm ci" est plus propre et rapide que "npm install" dans les environnements de CI
+        run: npm ci
 
-      # 3. Compilation automatique : compile src/* pour générer le fichier unique dans dist/
       - name: Build Javascript Bundle
         run: npm run build
 
-      # 4. Téléversement du fichier généré vers la Release GitHub
       - name: Upload JS Bundle to Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: dist/thermostat-simple-card.js # Correction du nom : simple-card
-          asset_name: thermostat-simple-card.js # Correction du nom : simple-card
+          file: dist/thermostat-simple-card.js
+          asset_name: thermostat-simple-card.js
           tag: ${{ github.ref }}
           overwrite: true
