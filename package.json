@@ -1,0 +1,12 @@
+{
+  "name": "thermostat-simple-card",
+  "version": "1.0.0",
+  "description": "Thermostat card for Home Assistant",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.0",
+    "rollup": "^4.0.0"
+  }
+}
