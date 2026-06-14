@@ -13,15 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # --- CORRECTION DE L'ACTION CI-DESSOUS ---
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
-      # ----------------------------------------
 
-      键- name: Install dependencies
+      - name: Install dependencies
         run: npm ci
 
       - name: Build Javascript Bundle
