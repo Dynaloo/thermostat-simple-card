@@ -7,21 +7,21 @@ on:
 jobs:
   upload:
     runs-on: ubuntu-latest
-    # --- AJOUTER LES LIGNES CI-DESSOUS ---
     permissions:
       contents: write # Permet au script d'ajouter des fichiers aux releases
-    # -------------------------------------
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # --- CORRECTION DE L'ACTION CI-DESSOUS ---
       - name: Setup Node.js
-        uses: actions/actions-setup-node@v4
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
+      # ----------------------------------------
 
-      - name: Install dependencies
+      键- name: Install dependencies
         run: npm ci
 
       - name: Build Javascript Bundle
