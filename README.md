@@ -1,6 +1,6 @@
 # 🌡️ Adaptive Custom Thermostat (Heater & AC)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration) ![Version](https://img.shields.io/github/v/release/dynaloo/thermostat-card?label=version&color=blue&maxAge=3600) ![Downloads](https://badgen.net/github/assets-dl/dynaloo/thermostat-card?label=Downloads&color=blue) [![Home Assistant Community Forum](https://img.shields.io/badge/Home%20Assistant-Community%20Forum-blue?logo=home-assistant)](https://community.home-assistant.io/t/simple-swipe-card-a-custom-card-for-easy-card-navigation/888415)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration) ![Version](https://img.shields.io/github/v/release/dynaloo/thermostat-simple-card?label=version&color=blue&maxAge=3600) ![Downloads](https://badgen.net/github/assets-dl/dynaloo/thermostat-simple-card?label=Downloads&color=blue) [![Home Assistant Community Forum](https://img.shields.io/badge/Home%20Assistant-Community%20Forum-blue?logo=home-assistant)](https://community.home-assistant.io/t/simple-swipe-card-a-custom-card-for-easy-card-navigation/888415)
 
 A universal, modern, and ultra-responsive Home Assistant (Lovelace) card to control your **conventional heating (pilot wire)** or **air conditioning (AC)** devices (tested with Mitsubishi Melcloud integration). Inspired by the sleek design of *Mushroom*, it consolidates all your essential controls in a minimal footprint.
 
@@ -81,27 +81,27 @@ current_temp_sensor: sensor.temperature_living_room
 
 <div style="text-align: center;">
   <p style="font-style: italic; color: gray; margin-top: 8px;">Preview: Thermostat heating in "<b>off</b>" mode</p>
-  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-card/main/images/Capture-1.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
+  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-simple-card/main/images/Capture-1.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
 </div>
 
 <div style="text-align: center;">
   <p style="font-style: italic; color: gray; margin-top: 8px;">Preview: Thermostat heating in "<b>on</b>" mode</p>
-  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-card/main/images/Capture-2.png" alt="Aperçu du Thermostat" width="400" style="display: block; margin: 0 auto;">
+  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-simple-card/main/images/Capture-2.png" alt="Aperçu du Thermostat" width="400" style="display: block; margin: 0 auto;">
 </div>
 
 <div style="text-align: center;">
   <p style="font-style: italic; color: gray; margin-top: 8px;">Preview: Thermostat heating in "<b>on</b>" mode and "<b>Active</b>" (flashing red dot displayed on the icon)</p>
-  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-card/main/images/Capture-3.png" alt="Aperçu du Thermostat" width="400" style="display: block; margin: 0 auto;">
+  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-simple-card/main/images/Capture-3.png" alt="Aperçu du Thermostat" width="400" style="display: block; margin: 0 auto;">
 </div>
 
 <div style="text-align: center;">
   <p style="font-style: italic; color: gray; margin-top: 8px;">Preview: Air conditioner thermostat in "<b>off</b>" mode</p>
-  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-card/main/images/Capture-4.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
+  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-simple-card/main/images/Capture-4.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
 </div>
 
 <div style="text-align: center;">
   <p style="font-style: italic; color: gray; margin-top: 8px;">Preview: Air conditioner thermostat in "<b>Fan only</b>" mode</p>
-  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-card/main/images/Capture-5.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
+  <img src="https://raw.githubusercontent.com/dynaloo/thermostat-simple-card/main/images/Capture-5.png" alt="Aperçu du Thermostat>" width="400" style="display: block; margin: 0 auto;">
 </div>
 ---
 
