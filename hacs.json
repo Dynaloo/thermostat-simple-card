@@ -1,5 +1,6 @@
 {
   "name": "Thermostat-simple-card",
+  "content_in_root": false,
   "render_readme": true,
   "filename": "thermostat-simple-card.js",
   "homeassistant": "2025.1.0",
