@@ -27,7 +27,7 @@ A universal, modern, and ultra-responsive Home Assistant (Lovelace) card to cont
 ## 🚀 Installation
 
 ### HACS (Recommended)
-[![Add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=dynaloo&repository=thermostat-card&category=Plugin)
+[![Add this repository to HACS.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Dynaloo&repository=thermostat-simple-card&category=Plugin)
 
 ### HACS (Manual)
 1. Open HACS
