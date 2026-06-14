@@ -4,6 +4,11 @@ on:
   release:
     types: [published]
 
+# --- AJOUT DE LA VARIABLE GLOBALE POUR FORCE NODE 24 ---
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+# --------------------------------------------------------
+
 jobs:
   upload:
     runs-on: ubuntu-latest
@@ -16,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24' # --- CHANGEMENT : Passage de '20' à '24' ---
           cache: 'npm'
 
       - name: Install dependencies
