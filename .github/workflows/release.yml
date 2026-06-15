@@ -11,11 +11,21 @@ jobs:
       contents: write # Permet au script d'ajouter des fichiers aux releases
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      # --- LA CORRECTION EST ICI : setup-node ---
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Validate release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tag="${{ github.event.release.tag_name }}"
+          if [[ ! "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Erreur : Le tag de la release '${tag}' doit être au format SemVer avec un 'v' (ex: v0.1.0)." >&2
+            exit 1
+          fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
