@@ -39,7 +39,7 @@ A universal, modern, and ultra-responsive Home Assistant (Lovelace) card to cont
 7. Search for "thermostat-simple-card" and install it
 
 ### Manual Installation
-1. Download `thermostat-card` from the latest release or from the `/build` folder in the main repository
+1. Download `thermostat-simple-card.js` from the latest release or from the `/build` folder in the main repository
 2. Copy it to `config/www/thermostat-simple-card/thermostat-simple-card.js`
 3. Add the following to your configuration.yaml:
    ```yaml
@@ -61,9 +61,9 @@ or simply add this block to your dashboard in YAML mode :
 ```yaml
 type: custom:thermostat-simple-card
 device_type: heater
-entity: climate.thermostat_living_room
+entity: climate.thermostat_living_room (to be replaced by your entity)
 title: Thermostat Living room
-current_temp_sensor: sensor.temperature_living_room
+current_temp_sensor: sensor.temperature_living_room (to be replaced by your sensor)
 ```
 
 
@@ -103,6 +103,7 @@ current_temp_sensor: sensor.temperature_living_room
   <p><i>Preview: Thermostat Air conditioner in "<b>fan</b>" mode</i></p>
   <img src="https://raw.githubusercontent.com/Dynaloo/thermostat-simple-card/main/images/Capture-5.png" alt="Aperçu du Thermostat" width="400">
 </div>
+
 ---
 
 🤝 Contribute! Suggestions and bug reports are welcome! Feel free to open an issue or submit a pull request to the repository.
