@@ -1,6 +1,6 @@
 # 🌡️ Adaptive Custom Thermostat card (Heater & AC)
 
-[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration) ![Version](https://badgen.net/github/release/Dynaloo/thermostat-simple-card?color=blue) ![Downloads](https://badgen.net/github/assets-dl/Dynaloo/thermostat-simple-card?label=Downloads&color=blue) [![Home Assistant Community Forum](https://img.shields.io/badge/Home%20Assistant-Community%20Forum-blue?logo=home-assistant)](https://community.home-assistant.io/t/simple-swipe-card-a-custom-card-for-easy-card-navigation/888415)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration) ![Version](https://badgen.net/github/release/Dynaloo/thermostat-simple-card?color=blue) ![Downloads](https://badgen.net/github/assets-dl/Dynaloo/thermostat-simple-card?label=Downloads&color=blue) [![HACF Forum](https://img.shields.io/badge/HACF-Forum%20Francophone-41BDF5?logo=home-assistant)](https://forum.hacf.fr/)
 
 A universal, modern, and ultra-responsive Home Assistant (Lovelace) card to control your **conventional heating (pilot wire)** or **air conditioning (AC)** devices (tested with Mitsubishi Melcloud integration). Inspired by the sleek design of *Mushroom*, it consolidates all your essential controls in a minimal footprint.
 
