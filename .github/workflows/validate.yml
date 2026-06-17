@@ -2,6 +2,9 @@ name: Validate
 
 on:
   push:
+    paths:
+      - 'src/**'
+      - 'hacs.json'  
   pull_request:
   schedule:
     - cron: "0 0 * * *"
