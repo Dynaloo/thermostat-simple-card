@@ -9,7 +9,7 @@ export const cardStyles = css`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 8px;
+    gap: 12px;
   }
 
   .mushroom-container { 
@@ -19,7 +19,8 @@ export const cardStyles = css`
     background: rgba(255,255,255,0.05); 
     padding: 6px; 
     border-radius: 12px;
-    flex: 1;
+    flex: 1; /* S'étend pour prendre toute la place restante */
+    min-width: 0;
   }
 
   .ambient-temp-container { display: flex; align-items: center; gap: 4px; color: var(--secondary-text-color); font-size: 13px; font-weight: 500; flex: 1; justify-content: center; cursor: help; }
@@ -39,48 +40,50 @@ export const cardStyles = css`
   .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
   .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
 
-  /* STRUCTURE DU CONTENEUR DES 3 POINTS */
+  /* FIX DU CONTENEUR DES 3 POINTS - LARGEUR GARANTIE */
   .menu-container-outside {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0; /* Empêche l'écrasement de l'élément à 0px */
   }
 
-  .dots-icon-trigger {
+  .menu-container-outside ha-icon-button {
     color: var(--secondary-text-color);
-    cursor: pointer;
     --mdc-icon-button-size: 40px;
-    transition: color 0.2s;
   }
 
-  .dots-icon-trigger:hover {
+  .menu-container-outside ha-icon-button:hover {
     color: var(--primary-text-color);
   }
 
-  /* Boîte de menu flottante CSS */
   .custom-dropdown-menu {
     position: absolute;
     right: 0;
-    top: 42px;
+    top: 44px;
     background: var(--card-background-color, #1c1c1e);
-    min-width: 180px;
+    min-width: 160px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 9999 !important; /* Force le plan supérieur */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    z-index: 9999 !important;
     overflow: hidden;
     padding: 4px 0;
   }
 
-  /* Option cliquable */
   .dropdown-item {
     padding: 10px 14px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: var(--primary-text-color);
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
     transition: background-color 0.15s;
+    white-space: nowrap;
   }
 
   .dropdown-item:hover {
