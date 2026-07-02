@@ -41,7 +41,7 @@ export const cardStyles = css`
   .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
   .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
 
-  /* GESTION COMPLÈTE DU BOUTON 3 POINTS ET DU MENU DEROULANT DROIT */
+  /* COMPOSANT DU BOUTON ET DU MENU DÉROULANT FLOTTANT */
   .menu-container-outside {
     position: relative;
     display: inline-block;
@@ -71,15 +71,15 @@ export const cardStyles = css`
     --mdc-icon-size: 24px;
   }
 
-  /* Boîte de menu flottante */
+  /* Boîte flottante contenant le menu déroulant */
   .custom-dropdown-menu {
     display: none;
     position: absolute;
     right: 0;
-    top: 42px;
+    top: 44px;
     background: var(--card-background-color, #1c1c1e);
     min-width: 180px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     z-index: 99;
@@ -91,7 +91,7 @@ export const cardStyles = css`
     display: block;
   }
 
-  /* Option cliquable à l'intérieur du menu */
+  /* Option de ligne dans le menu */
   .dropdown-item {
     padding: 10px 14px;
     display: flex;
@@ -131,12 +131,6 @@ export const cardStyles = css`
   .dialog-content { padding: 16px 0; color: var(--primary-text-color); min-width: 350px; }
   .dialog-content h3 { font-size: 13px; margin-top: 0; margin-bottom: 12px; color: var(--secondary-text-color); font-weight: 500; }
 
-  .ac-advanced-controls { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
-  .control-dropdown { display: flex; align-items: center; gap: 4px; background: rgba(255, 255, 255, 0.05); padding: 6px 10px; border-radius: 8px; flex: 1; justify-content: center; cursor: help; }
-  .control-dropdown ha-icon { --mdc-icon-size: 18px; color: var(--secondary-text-color); }
-  .control-dropdown select { background: transparent; border: none; color: var(--primary-text-color); font-size: 12px; font-weight: bold; outline: none; cursor: pointer; width: 100%; max-width: 75px; }
-  .control-dropdown select option { background: var(--card-background-color, #1c1c1e); color: var(--primary-text-color); }
-  
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   .spin-animation { animation: spin 2.5s linear infinite; }
   @keyframes blink { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
