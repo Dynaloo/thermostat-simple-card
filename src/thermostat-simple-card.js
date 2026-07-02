@@ -7,12 +7,14 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showDialog: { type: Boolean }
+      _showMenu: { type: Boolean },   // Gère l'affichage du petit menu contextuel
+      _showDialog: { type: Boolean }  // Gère l'affichage du grand pop-up graphique
     };
   }
 
   constructor() {
     super();
+    this._showMenu = false;
     this._showDialog = false;
   }
 
@@ -37,18 +39,22 @@ class ThermostatSimpleCard extends LitElement {
     return cardStyles;
   }
 
-  // Ouvre le dialogue et ferme proprement le dropdown
-  _openDialog(e) {
+  // Bascule l'affichage du menu des 3 points
+  _toggleMenu(e) {
     if (e) e.stopPropagation();
+    this._showMenu = !this._showMenu;
+  }
+
+  // Ouvre le graphique et ferme le menu
+  _openGraph(e) {
+    if (e) e.stopPropagation();
+    this._showMenu = false;
     this._showDialog = true;
   }
 
-  // Gère le choix dans le menu déroulant officiel
-  _handleMenuAction(ev) {
-    const itemAction = ev.detail.item.getAttribute("action");
-    if (itemAction === "history") {
-      this._openDialog();
-    }
+  // Permet de fermer le menu si on clique n'importe où ailleurs sur la carte
+  _closeMenu() {
+    this._showMenu = false;
   }
 
   render() {
@@ -134,7 +140,7 @@ class ThermostatSimpleCard extends LitElement {
     const displayTemp = targetTemp !== null ? `${targetTemp}°C` : '--°C';
 
     return html`
-      <ha-card>
+      <ha-card @click="${this._closeMenu}">
         <div class="card-header-container">
           <div class="main-title">${this.config.title || ''}</div>
         </div>
@@ -168,14 +174,17 @@ class ThermostatSimpleCard extends LitElement {
                 </div>
               </div>
 
-              <div class="menu-wrapper">
-                <ha-icon-button-dropdown
-                  .hass=${this.hass}
-                  .items=${[
-                    { path: "history", label: "Graphique d'historique", icon: "mdi:chart-timeline-variant" }
-                  ]}
-                  @action=${this._handleMenuAction}
-                ></ha-icon-button-dropdown>
+              <div class="menu-container-outside">
+                <button class="custom-dots-btn" title="Options" @click="${this._toggleMenu}">
+                  <ha-icon icon="mdi:dots-vertical"></ha-icon>
+                </button>
+                
+                <div class="custom-dropdown-menu ${this._showMenu ? 'show-menu' : ''}">
+                  <div class="dropdown-item" @click="${this._openGraph}">
+                    <ha-icon icon="mdi:chart-timeline-variant"></ha-icon>
+                    <span>Graphique d'historique</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -270,4 +279,4 @@ class ThermostatSimpleCard extends LitElement {
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte avec menu et historique natif." });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte stable avec bouton et historique natif." });
