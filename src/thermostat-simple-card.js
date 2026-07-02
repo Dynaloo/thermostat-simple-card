@@ -14,7 +14,6 @@ class ThermostatSimpleCard extends LitElement {
   constructor() {
     super();
     this._showMenu = false;
-    // On écoute le clic global sur le document pour fermer le menu automatiquement
     this._handleOutsideClick = this._handleOutsideClick.bind(this);
   }
 
@@ -28,7 +27,6 @@ class ThermostatSimpleCard extends LitElement {
     super.disconnectedCallback();
   }
 
-  // Ferme le menu si on clique en dehors de la carte ou du bouton
   _handleOutsideClick(e) {
     if (this._showMenu) {
       const path = e.composedPath();
@@ -68,13 +66,10 @@ class ThermostatSimpleCard extends LitElement {
     this._showMenu = false;
   }
 
-  // Déclenche l'affichage officiel de l'historique de Home Assistant
   _openHistory(e) {
     if (e) e.stopPropagation();
     this._showMenu = false;
     
-    // Pour afficher le graphique complet du thermostat (consignes + statut de chauffe),
-    // on appelle l'action 'more-info' sur l'entité climate principale.
     const event = new CustomEvent("hass-more-info", {
       detail: { entityId: this.config.entity },
       bubbles: true,
@@ -231,4 +226,4 @@ class ThermostatSimpleCard extends LitElement {
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte thermostat épurée avec historique fonctionnel." });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte thermostat épurée avec historique." });
