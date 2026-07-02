@@ -10,7 +10,7 @@ export const cardStyles = css`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 4px;
+    gap: 8px;
   }
 
   /* Bandeau grisé de réglage (prend la place restante à gauche) */
@@ -41,13 +41,75 @@ export const cardStyles = css`
   .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
   .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
 
-  /* Ajustement pour le bouton d'options natif */
-  .menu-wrapper {
+  /* GESTION COMPLÈTE DU BOUTON 3 POINTS ET DU MENU DEROULANT DROIT */
+  .menu-container-outside {
+    position: relative;
+    display: inline-block;
+  }
+
+  .custom-dots-btn {
+    background: transparent;
+    border: none;
+    color: var(--secondary-text-color);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    transition: background-color 0.2s, color 0.2s;
+    padding: 0;
+  }
+
+  .custom-dots-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--primary-text-color);
+  }
+
+  .custom-dots-btn ha-icon {
+    --mdc-icon-size: 24px;
+  }
+
+  /* Boîte de menu flottante */
+  .custom-dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 42px;
+    background: var(--card-background-color, #1c1c1e);
+    min-width: 180px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 99;
+    overflow: hidden;
+    padding: 4px 0;
+  }
+
+  .custom-dropdown-menu.show-menu {
+    display: block;
+  }
+
+  /* Option cliquable à l'intérieur du menu */
+  .dropdown-item {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary-text-color);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .dropdown-item ha-icon {
+    color: var(--secondary-text-color);
+    --mdc-icon-size: 18px;
   }
 
   .buttons2, .buttons3 { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; }
