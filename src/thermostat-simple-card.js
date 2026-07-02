@@ -7,15 +7,13 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showDialog: { type: Boolean },
-      _historyData: { type: Array } // Stockage des données d'historique chargées
+      _showDialog: { type: Boolean }
     };
   }
 
   constructor() {
     super();
     this._showDialog = false;
-    this._historyData = null;
   }
 
   static getConfigElement() {
@@ -39,52 +37,18 @@ class ThermostatSimpleCard extends LitElement {
     return cardStyles;
   }
 
-  // Génération de la structure des séries attendue par l'interface d'historique
-  _betterHistorySeries(entityId) {
-    if (!entityId || !this.hass?.states[entityId]) return [];
-    const stateObj = this.hass.states[entityId];
-    const tempUnit = stateObj.attributes.temperature_unit || this.hass.config?.unit_system?.temperature || "°C";
-
-    return [
-      { id: `state:${entityId}`, entity: entityId, label: "État global", valueType: "string" },
-      { id: `attr:${entityId}:current_temperature`, entity: entityId, attribute: "current_temperature", label: "Température actuelle", unit: tempUnit, valueType: "number" },
-      { id: `attr:${entityId}:temperature`, entity: entityId, attribute: "temperature", label: "Température de consigne", unit: tempUnit, valueType: "number" },
-      { id: `attr:${entityId}:hvac_action`, entity: entityId, attribute: "hvac_action", label: "Action HVAC", valueType: "string" }
-    ];
-  }
-
-  // Fonction permettant de charger l'historique auprès de Home Assistant (ex: dernières 24h)
-  async _fetchHistory() {
-    const entityId = this.config.entity;
-    if (!entityId || !this.hass) return;
-
-    const startTime = new Date();
-    startTime.setHours(startTime.getHours() - 24); // Demande les dernières 24 heures
-
-    try {
-      // Appel de l'API REST de Home Assistant pour l'historique
-      const apiResult = await this.hass.callApi(
-        "GET",
-        `history/period/${startTime.toISOString()}?filter_entity_id=${entityId}&minimal_response`
-      );
-
-      if (apiResult && apiResult.length > 0) {
-        this._historyData = apiResult;
-      } else {
-        this._historyData = [];
-      }
-    } catch (err) {
-      console.error("Erreur lors de la récupération de l'historique :", err);
-      this._historyData = [];
-    }
-  }
-
-  // Handler propre pour l'ouverture du pop-up depuis le menu
+  // Ouvre le dialogue et ferme proprement le dropdown
   _openDialog(e) {
     if (e) e.stopPropagation();
     this._showDialog = true;
-    this._historyData = null; // Reset le loader avant de charger
-    this._fetchHistory(); // Lance le chargement des courbes
+  }
+
+  // Gère le choix dans le menu déroulant officiel
+  _handleMenuAction(ev) {
+    const itemAction = ev.detail.item.getAttribute("action");
+    if (itemAction === "history") {
+      this._openDialog();
+    }
   }
 
   render() {
@@ -204,16 +168,15 @@ class ThermostatSimpleCard extends LitElement {
                 </div>
               </div>
 
-              <ha-button-menu dynamic-positioning fixedCorner="TOP_RIGHT">
-                <ha-icon-button slot="trigger" title="Menu d'options">
-                  <ha-icon icon="mdi:dots-vertical"></ha-icon>
-                </ha-icon-button>
-                
-                <mwc-list-item graphic="icon" @click="${this._openDialog}">
-                  <ha-icon slot="graphic" icon="mdi:chart-timeline-variant"></ha-icon>
-                  <span>Graphique d'historique</span>
-                </mwc-list-item>
-              </ha-button-menu>
+              <div class="menu-wrapper">
+                <ha-icon-button-dropdown
+                  .hass=${this.hass}
+                  .items=${[
+                    { path: "history", label: "Graphique d'historique", icon: "mdi:chart-timeline-variant" }
+                  ]}
+                  @action=${this._handleMenuAction}
+                ></ha-icon-button-dropdown>
+              </div>
 
             </div>
           </div>
@@ -284,21 +247,11 @@ class ThermostatSimpleCard extends LitElement {
             </button>
           </div>
           <div class="dialog-content">
-            <h3>Graphique d'historique (Séries avancées Equinox)</h3>
-            
-            ${this._historyData === null
-              ? html`<div style="padding: 16px; text-align: center; color: var(--secondary-text-color);">Chargement des données de l'historique...</div>`
-              : html`
-                  <state-history-charts
-                    .hass=${this.hass}
-                    .historyData=${{
-                      loading: false,
-                      stateHistory: { [entityId]: this._historyData }
-                    }}
-                    .entityIds=${[entityId]}
-                  ></state-history-charts>
-                `
-            }
+            <h3>Historique de l'appareil</h3>
+            <ha-more-info-history
+              .hass=${this.hass}
+              .entityId=${entityId}
+            ></ha-more-info-history>
           </div>
         </ha-dialog>
       </ha-card>
@@ -317,4 +270,4 @@ class ThermostatSimpleCard extends LitElement {
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte avec historique Equinox natif." });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte avec menu et historique natif." });
