@@ -50,8 +50,12 @@ class ThermostatSimpleCard extends LitElement {
     if (e) e.stopPropagation();
     this._showMenu = false;
     
+    // Si un capteur de température dédiée est configuré, on ouvre son historique (graphique linéaire garanti)
+    // Sinon, on ouvre l'historique du thermostat lui-même
+    const targetEntity = this.config.current_temp_sensor || this.config.entity;
+    
     const event = new CustomEvent("hass-more-info", {
-      detail: { entityId: this.config.entity },
+      detail: { entityId: targetEntity },
       bubbles: true,
       composed: true,
     });
