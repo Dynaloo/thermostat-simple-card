@@ -7,7 +7,7 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showMenu: { type: Boolean } // Gère l'affichage du menu des 3 points
+      _showMenu: { type: Boolean }
     };
   }
 
@@ -37,23 +37,19 @@ class ThermostatSimpleCard extends LitElement {
     return cardStyles;
   }
 
-  // Bascule l'état ouvert/fermé du menu
   _toggleMenu(e) {
     if (e) e.stopPropagation();
     this._showMenu = !this._showMenu;
   }
 
-  // Ferme le menu si on clique ailleurs sur la carte
   _closeMenu() {
     this._showMenu = false;
   }
 
-  // Ouvre le composant "Plus d'infos" officiel de Home Assistant (Graphique parfait)
   _openHistory(e) {
     if (e) e.stopPropagation();
-    this._showMenu = false; // Ferme le menu dropdown
+    this._showMenu = false;
     
-    // Déclenche l'événement Lovelace officiel de Home Assistant pour ouvrir le pop-up d'historique natif
     const event = new CustomEvent("hass-more-info", {
       detail: { entityId: this.config.entity },
       bubbles: true,
@@ -130,7 +126,7 @@ class ThermostatSimpleCard extends LitElement {
           case "eco": mainIcon = "mdi:leaf"; mainIconColor = "rgba(0, 128, 0, 1)"; break;
           case "frost": mainIcon = "mdi:snowflake-thermometer"; mainIconColor = "rgba(0, 191, 255, 1)"; break;
           case "boost": mainIcon = "mdi:rocket-launch"; mainIconColor = "rgba(255, 0, 0, 1)"; break;
-          default: mainIcon = "mdi:hand-back-right-outline"; mainIconColor = "rgba(255, 255, yellow, 1)"; break;
+          default: mainIcon = "mdi:hand-back-right-outline"; mainIconColor = "rgba(255, 255, 0, 1)"; break;
         }
       }
       if (isHeating) badgeHtml = html`<div class="heating-badge"></div>`;
@@ -175,14 +171,14 @@ class ThermostatSimpleCard extends LitElement {
               </div>
 
               <div class="menu-container-outside">
-                <ha-icon-button class="dots-icon-trigger" @click="${this._toggleMenu}" title="Options">
+                <ha-icon-button @click="${this._toggleMenu}" title="Options">
                   <ha-icon icon="mdi:dots-vertical"></ha-icon>
                 </ha-icon-button>
                 
                 <div class="custom-dropdown-menu" style="display: ${this._showMenu ? 'block' : 'none'};">
                   <div class="dropdown-item" @click="${this._openHistory}">
                     <ha-icon icon="mdi:chart-timeline-variant"></ha-icon>
-                    <span>Graphique d'historique</span>
+                    <span>Historique complet</span>
                   </div>
                 </div>
               </div>
