@@ -3,35 +3,81 @@ import { css } from "https://unpkg.com/lit@3/index.js?module";
 export const cardStyles = css`
   .card-container { padding: 0 16px 12px 16px; display: flex; flex-direction: column; gap: 5px; }
   .buttons1 { margin-top: 12px !important; }
-  .mushroom-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 12px; }
+  
+  /* Alignement en ligne du bandeau et du bouton 3 points extérieur */
+  .controls-row-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 4px;
+  }
+
+  /* Bandeau grisé de réglage (prend la place restante à gauche) */
+  .mushroom-container { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    background: rgba(255,255,255,0.05); 
+    padding: 6px; 
+    border-radius: 12px;
+    flex: 1;
+  }
+
   .ambient-temp-container { display: flex; align-items: center; gap: 4px; color: var(--secondary-text-color); font-size: 13px; font-weight: 500; flex: 1; justify-content: center; cursor: help; }
   .ambient-temp-container ha-icon { font-size: 16px !important; --mdc-icon-size: 16px !important; width: 16px !important; height: 16px !important; display: flex; align-items: center; justify-content: center; opacity: 0.7; }
   .icon-wrapper { position: relative; display: inline-flex; cursor: help; }
   
-  .heating-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #ff5722; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); animation: pulse 2s infinite; }
-  .cooling-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #00bfff; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); animation: pulse-blue 2s infinite; }
-  
-  .shape { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; }
-  .shape ha-icon { font-size: 24px !important; --mdc-icon-size: 24px !important; width: 24px !important; height: 24px !important; display: flex; }
-  .controls { display: flex; align-items: center; gap: 8px; }
-  .btn-inc-dec { background: rgba(255, 255, 255, 0.08); border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary-text-color); transition: background 0.2s, transform 0.1s; padding: 0; }
-  .btn-inc-dec:hover:not(:disabled) { background: rgba(255, 255, 255, 0.15); }
-  .btn-inc-dec:active:not(:disabled) { transform: scale(0.92); }
-  .btn-inc-dec:disabled { opacity: 0.3; cursor: not-allowed; }
-  .btn-inc-dec ha-icon { font-size: 16px !important; --mdc-icon-size: 16px !important; width: 16px !important; height: 16px !important; display: flex; }
-  .temp-display { font-size: 16px; font-weight: bold; min-width: 50px; text-align: center; cursor: default; }
-  
-  .buttons2 { display: flex; justify-content: center; gap: 20px; margin-bottom: 8px; }
-  .buttons2 .btn { width: 45% !important; flex: none !important; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); }
-  .buttons2 .btn.active-heat { background: rgba(255, 0, 0, 0.1) !important; border: 1px solid rgba(255, 0, 0, 0.3); }
-  .buttons2 .btn.active-off { background: rgba(255, 255, 255, 0.1) !important; border: 1px solid rgba(255, 255, 255, 0.3); }
-  
-  .buttons3 { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 4px; flex-wrap: wrap; }
-  .btn { background: transparent; border: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 6px 4px; border-radius: 8px; color: var(--primary-text-color); flex: 1; min-width: 50px; transition: background 0.2s; }
-  .btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .btn ha-icon { font-size: 30px !important; --mdc-icon-size: 30px !important; width: 30px !important; height: 30px !important; display: flex; }
-  .btn span { font-size: 13px !important; font-weight: 500 !important; display: inline-block; margin-top: 2px; text-transform: capitalize; }
+  .heating-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #ff5722; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); }
+  .cooling-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #03a9f4; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); }
+
+  .shape { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .shape ha-icon { --mdc-icon-size: 22px; }
+
+  .controls { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); }
+  .btn-inc-dec { width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,0.08); color: var(--primary-text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background-color 0.2s; }
+  .btn-inc-dec:hover:not([disabled]) { background: rgba(255,255,255,0.15); }
+  .btn-inc-dec[disabled] { opacity: 0.3; cursor: not-allowed; }
+  .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
+  .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
+
+  /* Bouton 3 points du Menu Déroulant */
+  ha-icon-button {
+    --mdc-icon-button-size: 40px;
+    color: var(--secondary-text-color);
+    transition: color 0.2s;
+  }
+  ha-icon-button:hover {
+    color: var(--primary-text-color);
+  }
+
+  /* Items du menu déroulant */
+  ha-list-item {
+    cursor: pointer;
+    --mdc-theme-text-primary-on-background: var(--primary-text-color);
+  }
+  ha-list-item ha-icon {
+    color: var(--secondary-text-color);
+  }
+
+  .buttons2, .buttons3 { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; }
+  .btn { flex: 1; height: 40px; border-radius: 10px; border: none; background: rgba(255,255,255,0.05); color: var(--primary-text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 500; transition: background-color 0.2s, box-shadow 0.2s; }
+  .btn:hover { background: rgba(255,255,255,0.1); }
+  .btn ha-icon { --mdc-icon-size: 18px; }
+
+  .active-heat { background: rgba(255, 87, 34, 0.15) !important; border: 1px solid rgba(255, 87, 34, 0.3) !important; }
+  .active-off { background: rgba(255, 255, 255, 0.1) !important; border: 1px solid rgba(255, 255, 255, 0.2) !important; }
+
+  .card-header-container { padding: 12px 16px 4px 16px; }
+  .main-title { font-size: 16px; font-weight: bold; color: var(--primary-text-color); }
+
+  /* POP-UP MODAL HISTORIQUE */
+  .dialog-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .dialog-header h2 { margin: 0; font-size: 18px; color: var(--primary-text-color); }
+  .btn-close { background: transparent; border: none; cursor: pointer; color: var(--secondary-text-color); padding: 4px; display: flex; align-items: center; }
+  .btn-close:hover { color: var(--primary-text-color); }
+  .dialog-content { padding: 16px 0; color: var(--primary-text-color); min-width: 350px; }
+  .dialog-content h3 { font-size: 13px; margin-top: 0; margin-bottom: 12px; color: var(--secondary-text-color); font-weight: 500; }
 
   .ac-advanced-controls { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); }
   .control-dropdown { display: flex; align-items: center; gap: 4px; background: rgba(255, 255, 255, 0.05); padding: 6px 10px; border-radius: 8px; flex: 1; justify-content: center; cursor: help; }
@@ -41,8 +87,6 @@ export const cardStyles = css`
   
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   .spin-animation { animation: spin 2.5s linear infinite; }
-  @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-  .blink { animation: blink 3s infinite; }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 87, 34, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0); } }
-  @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(0, 191, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0); } }
+  @keyframes blink { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+  .blink { animation: blink 2s linear infinite; }
 `;
