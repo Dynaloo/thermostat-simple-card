@@ -4,7 +4,6 @@ export const cardStyles = css`
   .card-container { padding: 0 16px 12px 16px; display: flex; flex-direction: column; gap: 5px; }
   .buttons1 { margin-top: 12px !important; }
   
-  /* Alignement en ligne du bandeau et du bouton 3 points extérieur */
   .controls-row-container {
     display: flex;
     align-items: center;
@@ -13,7 +12,6 @@ export const cardStyles = css`
     gap: 8px;
   }
 
-  /* Bandeau grisé de réglage (prend la place restante à gauche) */
   .mushroom-container { 
     display: flex; 
     align-items: center; 
@@ -41,57 +39,39 @@ export const cardStyles = css`
   .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
   .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
 
-  /* COMPOSANT DU BOUTON ET DU MENU DÉROULANT FLOTTANT */
+  /* STRUCTURE DU CONTENEUR DES 3 POINTS */
   .menu-container-outside {
     position: relative;
     display: inline-block;
   }
 
-  .custom-dots-btn {
-    background: transparent;
-    border: none;
+  .dots-icon-trigger {
     color: var(--secondary-text-color);
     cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s, color 0.2s;
-    padding: 0;
+    --mdc-icon-button-size: 40px;
+    transition: color 0.2s;
   }
 
-  .custom-dots-btn:hover {
-    background-color: rgba(255, 255, 255, 0.08);
+  .dots-icon-trigger:hover {
     color: var(--primary-text-color);
   }
 
-  .custom-dots-btn ha-icon {
-    --mdc-icon-size: 24px;
-  }
-
-  /* Boîte flottante contenant le menu déroulant */
+  /* Boîte de menu flottante CSS */
   .custom-dropdown-menu {
-    display: none;
     position: absolute;
     right: 0;
-    top: 44px;
+    top: 42px;
     background: var(--card-background-color, #1c1c1e);
     min-width: 180px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 99;
+    z-index: 9999 !important; /* Force le plan supérieur */
     overflow: hidden;
     padding: 4px 0;
   }
 
-  .custom-dropdown-menu.show-menu {
-    display: block;
-  }
-
-  /* Option de ligne dans le menu */
+  /* Option cliquable */
   .dropdown-item {
     padding: 10px 14px;
     display: flex;
@@ -122,14 +102,6 @@ export const cardStyles = css`
 
   .card-header-container { padding: 12px 16px 4px 16px; }
   .main-title { font-size: 16px; font-weight: bold; color: var(--primary-text-color); }
-
-  /* POP-UP MODAL HISTORIQUE */
-  .dialog-header { display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-  .dialog-header h2 { margin: 0; font-size: 18px; color: var(--primary-text-color); }
-  .btn-close { background: transparent; border: none; cursor: pointer; color: var(--secondary-text-color); padding: 4px; display: flex; align-items: center; }
-  .btn-close:hover { color: var(--primary-text-color); }
-  .dialog-content { padding: 16px 0; color: var(--primary-text-color); min-width: 350px; }
-  .dialog-content h3 { font-size: 13px; margin-top: 0; margin-bottom: 12px; color: var(--secondary-text-color); font-weight: 500; }
 
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   .spin-animation { animation: spin 2.5s linear infinite; }
