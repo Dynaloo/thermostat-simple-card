@@ -41,23 +41,13 @@ export const cardStyles = css`
   .btn-inc-dec ha-icon { --mdc-icon-size: 18px; }
   .temp-display { font-size: 15px; font-weight: bold; color: var(--primary-text-color); min-width: 45px; text-align: center; }
 
-  /* Bouton 3 points du Menu Déroulant */
-  ha-icon-button {
-    --mdc-icon-button-size: 40px;
-    color: var(--secondary-text-color);
-    transition: color 0.2s;
-  }
-  ha-icon-button:hover {
-    color: var(--primary-text-color);
-  }
-
-  /* Items du menu déroulant */
-  ha-list-item {
-    cursor: pointer;
-    --mdc-theme-text-primary-on-background: var(--primary-text-color);
-  }
-  ha-list-item ha-icon {
-    color: var(--secondary-text-color);
+  /* Ajustement pour le bouton d'options natif */
+  .menu-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
   }
 
   .buttons2, .buttons3 { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; }
