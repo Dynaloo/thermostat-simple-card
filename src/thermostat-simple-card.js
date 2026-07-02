@@ -7,15 +7,35 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showMenu: { type: Boolean },
-      _showDialog: { type: Boolean } // Propriété pour piloter la boîte de dialogue du graphique
+      _showMenu: { type: Boolean }
     };
   }
 
   constructor() {
     super();
     this._showMenu = false;
-    this._showDialog = false;
+    // On écoute le clic global sur le document pour fermer le menu automatiquement
+    this._handleOutsideClick = this._handleOutsideClick.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener("click", this._handleOutsideClick);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener("click", this._handleOutsideClick);
+    super.disconnectedCallback();
+  }
+
+  // Ferme le menu si on clique en dehors de la carte ou du bouton
+  _handleOutsideClick(e) {
+    if (this._showMenu) {
+      const path = e.composedPath();
+      if (!path.includes(this)) {
+        this._showMenu = false;
+      }
+    }
   }
 
   static getConfigElement() {
@@ -48,11 +68,19 @@ class ThermostatSimpleCard extends LitElement {
     this._showMenu = false;
   }
 
-  // Ouvre la boîte de dialogue interne avec le graphique d'historique complet
+  // Déclenche l'affichage officiel de l'historique de Home Assistant
   _openHistory(e) {
     if (e) e.stopPropagation();
     this._showMenu = false;
-    this._showDialog = true;
+    
+    // Pour afficher le graphique complet du thermostat (consignes + statut de chauffe),
+    // on appelle l'action 'more-info' sur l'entité climate principale.
+    const event = new CustomEvent("hass-more-info", {
+      detail: { entityId: this.config.entity },
+      bubbles: true,
+      composed: true,
+    });
+    this.dispatchEvent(event);
   }
 
   render() {
@@ -161,9 +189,9 @@ class ThermostatSimpleCard extends LitElement {
                 }
                 
                 <div class="controls">
-                  <button class="btn-inc-dec" .disabled="${mode === 'unknown' || mode === 'off' || targetTemp === null}" @click="${() => this._setTemp(stateObj, -1)}"><ha-icon icon="mdi:minus"></ha-icon></button>
+                  <button class="btn-inc-dec" .disabled="${mode === 'unknown' || mode === 'off' || targetTemp === null}" @click="${(e) => { e.stopPropagation(); this._setTemp(stateObj, -1); }}"><ha-icon icon="mdi:minus"></ha-icon></button>
                   <span class="temp-display">${displayTemp}</span>
-                  <button class="btn-inc-dec" .disabled="${mode === 'unknown' || mode === 'off' || targetTemp === null}" @click="${() => this._setTemp(stateObj, 1)}"><ha-icon icon="mdi:plus"></ha-icon></button>
+                  <button class="btn-inc-dec" .disabled="${mode === 'unknown' || mode === 'off' || targetTemp === null}" @click="${(e) => { e.stopPropagation(); this._setTemp(stateObj, 1); }}"><ha-icon icon="mdi:plus"></ha-icon></button>
                 </div>
               </div>
 
@@ -183,28 +211,10 @@ class ThermostatSimpleCard extends LitElement {
             </div>
           </div>
 
-          ${deviceType === "heater" ? html`<div class="buttons2"><button class="btn ${mode === 'heat' ? 'active-heat' : ''}" @click="${() => this._setHvacMode('heat')}"><ha-icon icon="mdi:fire" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>on</span></button><button class="btn ${mode === 'off' ? 'active-off' : ''}" @click="${() => this._setHvacMode('off')}"><ha-icon icon="mdi:power" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>off</span></button></div>` : html``}
-          ${(deviceType === "heater" && mode !== "off" && mode !== "unknown") || deviceType === "ac" ? html`<div class="buttons3">${deviceType === "heater" ? presetModes.map((pMode) => { let icon = "mdi:bookmark"; let color = "rgba(128, 128, 128, 1)"; let label = pMode; switch (pMode) { case "comfort": icon = "mdi:sofa"; color = "rgba(255, 165, 0, 1)"; label = "Confort"; break; case "eco": icon = "mdi:leaf"; color = "rgba(0, 128, 0, 1)"; label = "Eco"; break; case "frost": icon = "mdi:snowflake-thermometer"; color = "rgba(0, 191, 255, 1)"; label = "Hors gel"; break; case "boost": icon = "mdi:rocket-launch"; color = "rgba(255, 0, 0, 1)"; label = "Boost"; break; case "none": icon = "mdi:hand-back-right-outline"; color = "rgba(255, 255, 0, 1)"; label = "Manuel"; break; } return html`<button class="btn" @click="${() => this._setPreset(pMode)}"><ha-icon icon="${icon}" style="color: ${preset === pMode ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>${label}</span></button>`; }) : hvacModes.map((hMode) => { let icon = "mdi:help-circle-outline"; let color = "rgba(128, 128, 128, 1)"; let label = hMode; switch (hMode) { case "heat": icon = "mdi:fire"; color = "rgba(255, 100, 0, 1)"; label = "Heat"; break; case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; break; case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; break; case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; break; case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; break; case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; break; } return html`<button class="btn" @click="${() => this._setHvacMode(hMode)}"><ha-icon icon="${icon}" class="${hMode === 'fan_only' && mode === 'fan_only' ? 'spin-animation' : ''}" style="color: ${mode === hMode ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>${label}</span></button>`; })}</div>` : html``}
+          ${deviceType === "heater" ? html`<div class="buttons2"><button class="btn ${mode === 'heat' ? 'active-heat' : ''}" @click="${(e) => { e.stopPropagation(); this._setHvacMode('heat'); }}"><ha-icon icon="mdi:fire" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>on</span></button><button class="btn ${mode === 'off' ? 'active-off' : ''}" @click="${(e) => { e.stopPropagation(); this._setHvacMode('off'); }}"><ha-icon icon="mdi:power" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>off</span></button></div>` : html``}
+          
+          ${(deviceType === "heater" && mode !== "off" && mode !== "unknown") || deviceType === "ac" ? html`<div class="buttons3">${deviceType === "heater" ? presetModes.map((pMode) => { let icon = "mdi:bookmark"; let color = "rgba(128, 128, 128, 1)"; let label = pMode; switch (pMode) { case "comfort": icon = "mdi:sofa"; color = "rgba(255, 165, 0, 1)"; label = "Confort"; break; case "eco": icon = "mdi:leaf"; color = "rgba(0, 128, 0, 1)"; label = "Eco"; break; case "frost": icon = "mdi:snowflake-thermometer"; color = "rgba(0, 191, 255, 1)"; label = "Hors gel"; break; case "boost": icon = "mdi:rocket-launch"; color = "rgba(255, 0, 0, 1)"; label = "Boost"; break; case "none": icon = "mdi:hand-back-right-outline"; color = "rgba(255, 255, 0, 1)"; label = "Manuel"; break; } return html`<button class="btn" @click="${(e) => { e.stopPropagation(); this._setPreset(pMode); }}"><ha-icon icon="${icon}" style="color: ${preset === pMode ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>${label}</span></button>`; }) : hvacModes.map((hMode) => { let icon = "mdi:help-circle-outline"; let color = "rgba(128, 128, 128, 1)"; let label = hMode; switch (hMode) { case "heat": icon = "mdi:fire"; color = "rgba(255, 100, 0, 1)"; label = "Heat"; break; case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; break; case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; break; case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; break; case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; break; case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; break; } return html`<button class="btn" @click="${(e) => { e.stopPropagation(); this._setHvacMode(hMode); }}"><ha-icon icon="${icon}" class="${hMode === 'fan_only' && mode === 'fan_only' ? 'spin-animation' : ''}" style="color: ${mode === hMode ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon><span>${label}</span></button>`; })}</div>` : html``}
         </div>
-
-        <ha-dialog .open=${this._showDialog} @closed=${() => this._showDialog = false} heading="Historique Avancé">
-          <div slot="heading" style="display: flex; justify-content: space-between; align-items: center; width:100%;">
-            <h2 style="margin:0; font-size:18px;">Graphique d'historique</h2>
-            <ha-icon-button @click=${() => this._showDialog = false}>
-              <ha-icon icon="mdi:close"></ha-icon>
-            </ha-icon-button>
-          </div>
-          <div style="padding: 20px 10px; min-width: 320px; background: var(--card-background-color);">
-            <state-history-charts
-              .hass=${this.hass}
-              .historyData=${{
-                loading: false,
-                entityIds: [entityId],
-                data: this.hass.states[entityId] ? { [entityId]: [] } : {}
-              }}
-            ></state-history-charts>
-          </div>
-        </ha-dialog>
       </ha-card>
     `;
   }
@@ -221,4 +231,4 @@ class ThermostatSimpleCard extends LitElement {
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte avec historique de style Equinox intégré." });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte thermostat épurée avec historique fonctionnel." });
