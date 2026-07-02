@@ -7,8 +7,8 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showMenu: { type: Boolean },   // Gère l'affichage du petit menu contextuel
-      _showDialog: { type: Boolean }  // Gère l'affichage du grand pop-up graphique
+      _showMenu: { type: Boolean },   // Gère l'ouverture du petit menu 3 points
+      _showDialog: { type: Boolean }  // Gère l'ouverture de la boîte de dialogue du graphique
     };
   }
 
@@ -39,20 +39,20 @@ class ThermostatSimpleCard extends LitElement {
     return cardStyles;
   }
 
-  // Bascule l'affichage du menu des 3 points
+  // Ouvre / Ferme le menu 3 points au clic
   _toggleMenu(e) {
     if (e) e.stopPropagation();
     this._showMenu = !this._showMenu;
   }
 
-  // Ouvre le graphique et ferme le menu
+  // Ouvre le graphique et ferme le menu proprement
   _openGraph(e) {
     if (e) e.stopPropagation();
     this._showMenu = false;
     this._showDialog = true;
   }
 
-  // Permet de fermer le menu si on clique n'importe où ailleurs sur la carte
+  // Ferme le menu si l'utilisateur clique n'importe où ailleurs sur la carte
   _closeMenu() {
     this._showMenu = false;
   }
@@ -83,11 +83,7 @@ class ThermostatSimpleCard extends LitElement {
     const mode = stateObj.state ?? "unknown";
     const attributes = stateObj.attributes ?? {};
     const preset = attributes.preset_mode ?? "none";
-    const fanMode = attributes.fan_mode ?? "auto";
-    const swingMode = attributes.swing_mode ?? "off";
     
-    const fanModes = attributes.fan_modes ?? ["auto", "low", "medium", "high"];
-    const swingModes = attributes.swing_modes ?? ["off", "vertical", "horizontal", "both"];
     const presetModes = attributes.preset_modes ?? [];
     const hvacModes = attributes.hvac_modes ?? [];
 
@@ -104,7 +100,6 @@ class ThermostatSimpleCard extends LitElement {
     let shapeColor = "rgba(255, 255, 255, 0.05)"; 
     let badgeHtml = html``;
     let isMainIconFan = false;
-    let mainIconTooltip = "Statut";
 
     if (mode === "off" || mode === "unknown") {
       shapeColor = "rgba(128, 128, 128, 0.1)"; 
@@ -150,7 +145,7 @@ class ThermostatSimpleCard extends LitElement {
             <div class="controls-row-container">
               
               <div class="mushroom-container">
-                <div class="icon-wrapper" title="${mainIconTooltip}">
+                <div class="icon-wrapper">
                   <div class="shape" style="background-color: ${shapeColor};">
                     <ha-icon .icon="${mainIcon}" class="${isMainIconFan ? 'spin-animation' : ''}" style="color: ${mainIconColor};"></ha-icon>
                   </div>
@@ -279,4 +274,4 @@ class ThermostatSimpleCard extends LitElement {
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte stable avec bouton et historique natif." });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte stable avec graphique et menu corrigé." });
