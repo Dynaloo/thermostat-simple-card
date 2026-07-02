@@ -7,13 +7,15 @@ class ThermostatSimpleCard extends LitElement {
     return {
       hass: { type: Object },
       config: { type: Object },
-      _showDialog: { type: Boolean } // État interne pour gérer l'ouverture du pop-up d'historique
+      _showDialog: { type: Boolean },
+      _historyData: { type: Array } // Stockage des données d'historique chargées
     };
   }
 
   constructor() {
     super();
     this._showDialog = false;
+    this._historyData = null;
   }
 
   static getConfigElement() {
@@ -30,9 +32,6 @@ class ThermostatSimpleCard extends LitElement {
   }
 
   setConfig(config) {
-    if (!config.entity) {
-      console.warn("Thermostat Simple Card: L'attribut 'entity' est manquant.");
-    }
     this.config = config;
   }
 
@@ -40,7 +39,7 @@ class ThermostatSimpleCard extends LitElement {
     return cardStyles;
   }
 
-  // Méthode pour diviser l'entité climate en séries d'historique de composants distincts
+  // Génération de la structure des séries attendue par l'interface d'historique
   _betterHistorySeries(entityId) {
     if (!entityId || !this.hass?.states[entityId]) return [];
     const stateObj = this.hass.states[entityId];
@@ -52,6 +51,40 @@ class ThermostatSimpleCard extends LitElement {
       { id: `attr:${entityId}:temperature`, entity: entityId, attribute: "temperature", label: "Température de consigne", unit: tempUnit, valueType: "number" },
       { id: `attr:${entityId}:hvac_action`, entity: entityId, attribute: "hvac_action", label: "Action HVAC", valueType: "string" }
     ];
+  }
+
+  // Fonction permettant de charger l'historique auprès de Home Assistant (ex: dernières 24h)
+  async _fetchHistory() {
+    const entityId = this.config.entity;
+    if (!entityId || !this.hass) return;
+
+    const startTime = new Date();
+    startTime.setHours(startTime.getHours() - 24); // Demande les dernières 24 heures
+
+    try {
+      // Appel de l'API REST de Home Assistant pour l'historique
+      const apiResult = await this.hass.callApi(
+        "GET",
+        `history/period/${startTime.toISOString()}?filter_entity_id=${entityId}&minimal_response`
+      );
+
+      if (apiResult && apiResult.length > 0) {
+        this._historyData = apiResult;
+      } else {
+        this._historyData = [];
+      }
+    } catch (err) {
+      console.error("Erreur lors de la récupération de l'historique :", err);
+      this._historyData = [];
+    }
+  }
+
+  // Handler propre pour l'ouverture du pop-up depuis le menu
+  _openDialog(e) {
+    if (e) e.stopPropagation();
+    this._showDialog = true;
+    this._historyData = null; // Reset le loader avant de charger
+    this._fetchHistory(); // Lance le chargement des courbes
   }
 
   render() {
@@ -73,11 +106,7 @@ class ThermostatSimpleCard extends LitElement {
     const stateObj = this.hass.states[entityId];
     if (!stateObj) {
       return html`
-        <ha-card>
-          <div style="padding: 16px; color: var(--error-color, red); font-weight: bold;">
-            Entité introuvable : ${entityId}
-          </div>
-        </ha-card>
+        <ha-card><div style="padding: 16px; color: var(--error-color, red); font-weight: bold;">Entité introuvable</div></ha-card>
       `;
     }
 
@@ -105,7 +134,7 @@ class ThermostatSimpleCard extends LitElement {
     let shapeColor = "rgba(255, 255, 255, 0.05)"; 
     let badgeHtml = html``;
     let isMainIconFan = false;
-    let mainIconTooltip = "Statut de l'appareil";
+    let mainIconTooltip = "Statut";
 
     if (mode === "off" || mode === "unknown") {
       shapeColor = "rgba(128, 128, 128, 0.1)"; 
@@ -175,15 +204,15 @@ class ThermostatSimpleCard extends LitElement {
                 </div>
               </div>
 
-              <ha-button-menu @click="${(e) => e.stopPropagation()}">
-                <ha-icon-button slot="trigger" label="Menu d'options">
+              <ha-button-menu dynamic-positioning fixedCorner="TOP_RIGHT">
+                <ha-icon-button slot="trigger" title="Menu d'options">
                   <ha-icon icon="mdi:dots-vertical"></ha-icon>
                 </ha-icon-button>
                 
-                <ha-list-item graphic="icon" @click="${() => this._showDialog = true}">
+                <mwc-list-item graphic="icon" @click="${this._openDialog}">
                   <ha-icon slot="graphic" icon="mdi:chart-timeline-variant"></ha-icon>
                   <span>Graphique d'historique</span>
-                </ha-list-item>
+                </mwc-list-item>
               </ha-button-menu>
 
             </div>
@@ -245,25 +274,6 @@ class ThermostatSimpleCard extends LitElement {
                 </div>
               ` : html``
           }
-
-          ${deviceType === "ac" && mode !== "off" && mode !== "unknown"
-            ? html`
-                <div class="ac-advanced-controls">
-                  <div class="control-dropdown">
-                    <ha-icon icon="mdi:fan-speed-1"></ha-icon>
-                    <select @change="${(e) => this._setFanMode(e.target.value)}">
-                      ${fanModes.map((fMode) => html`<option value="${fMode}" ?selected="${fanMode === fMode}">${fMode.toUpperCase()}</option>`)}
-                    </select>
-                  </div>
-                  <div class="control-dropdown">
-                    <ha-icon icon="mdi:arrow-up-down-bold"></ha-icon>
-                    <select @change="${(e) => this._setSwingMode(e.target.value)}">
-                      ${swingModes.map((sMode) => html`<option value="${sMode}" ?selected="${swingMode === sMode}">${sMode.toUpperCase()}</option>`)}
-                    </select>
-                  </div>
-                </div>
-              ` : html``
-          }
         </div>
 
         <ha-dialog .open=${this._showDialog} @closed=${() => this._showDialog = false} heading="Options & Historique">
@@ -275,50 +285,36 @@ class ThermostatSimpleCard extends LitElement {
           </div>
           <div class="dialog-content">
             <h3>Graphique d'historique (Séries avancées Equinox)</h3>
-            <state-history-charts
-              .hass=${this.hass}
-              .historyData=${this._betterHistorySeries(entityId)}
-              .endTime=${new Date()}
-            ></state-history-charts>
+            
+            ${this._historyData === null
+              ? html`<div style="padding: 16px; text-align: center; color: var(--secondary-text-color);">Chargement des données de l'historique...</div>`
+              : html`
+                  <state-history-charts
+                    .hass=${this.hass}
+                    .historyData=${{
+                      loading: false,
+                      stateHistory: { [entityId]: this._historyData }
+                    }}
+                    .entityIds=${[entityId]}
+                  ></state-history-charts>
+                `
+            }
           </div>
         </ha-dialog>
       </ha-card>
     `;
   }
 
-  _setHvacMode(mode) {
-    if (!this.config?.entity) return;
-    this.hass.callService("climate", "set_hvac_mode", { entity_id: this.config.entity, hvac_mode: mode });
-  }
-
-  _setPreset(preset) {
-    if (!this.config?.entity) return;
-    this.hass.callService("climate", "set_preset_mode", { entity_id: this.config.entity, preset_mode: preset });
-  }
-
+  _setHvacMode(mode) { if (this.config?.entity) this.hass.callService("climate", "set_hvac_mode", { entity_id: this.config.entity, hvac_mode: mode }); }
+  _setPreset(preset) { if (this.config?.entity) this.hass.callService("climate", "set_preset_mode", { entity_id: this.config.entity, preset_mode: preset }); }
   _setTemp(stateObj, direction) {
     if (!this.config?.entity) return;
     const currentTemp = parseFloat(stateObj?.attributes?.temperature ?? stateObj?.attributes?.target_temp ?? 20);
     const step = parseFloat(stateObj?.attributes?.target_temp_step ?? 0.5);
-    if (isNaN(currentTemp)) return;
-
-    this.hass.callService("climate", "set_temperature", { 
-      entity_id: this.config.entity, 
-      temperature: currentTemp + (direction * step) 
-    });
-  }
-
-  _setFanMode(fanMode) {
-    if (!this.config?.entity) return;
-    this.hass.callService("climate", "set_fan_mode", { entity_id: this.config.entity, fan_mode: fanMode });
-  }
-
-  _setSwingMode(swingMode) {
-    if (!this.config?.entity) return;
-    this.hass.callService("climate", "set_swing_mode", { entity_id: this.config.entity, swing_mode: swingMode });
+    this.hass.callService("climate", "set_temperature", { entity_id: this.config.entity, temperature: currentTemp + (direction * step) });
   }
 }
 
 customElements.define("thermostat-simple-card", ThermostatSimpleCard);
 window.customCards = window.customCards || [];
-window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte universelle adaptative sécurisée avec Historique Equinox" });
+window.customCards.push({ type: "thermostat-simple-card", name: "Thermostat Simple Card", description: "Carte avec historique Equinox natif." });
