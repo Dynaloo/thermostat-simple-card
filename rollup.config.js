@@ -11,6 +11,6 @@ export default {
   plugins: [
     nodeResolve(),
     // Ligne ci-dessous à décommenter pour minifier le fichier final pour HACS
-    // terser() 
+    terser() 
   ]
 };
