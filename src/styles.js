@@ -8,7 +8,7 @@ export const cardStyles = css`
   .ambient-temp-container ha-icon { font-size: 16px !important; --mdc-icon-size: 16px !important; width: 16px !important; height: 16px !important; display: flex; align-items: center; justify-content: center; opacity: 0.7; }
   .icon-wrapper { position: relative; display: inline-flex; cursor: help; }
   
-  .heating-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #ff5722; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); animation: pulse 2s infinite; }
+  .heating-badge { position: absolute; top: -6px; right: -6px; --mdc-icon-size: 14px; width: 14px; height: 14px; color: #ff5722; animation: pulse-red 2s infinite ease-in-out; pointer-events: none; }
   .cooling-badge { position: absolute; top: -2px; right: -2px; width: 12px; height: 12px; background-color: #00bfff; border-radius: 50%; border: 2px solid var(--card-background-color, #1c1c1e); animation: pulse-blue 2s infinite; }
   
   .shape { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s; }
@@ -39,10 +39,28 @@ export const cardStyles = css`
   .control-dropdown select { background: transparent; border: none; color: var(--primary-text-color); font-size: 12px; font-weight: bold; outline: none; cursor: pointer; width: 100%; max-width: 75px; }
   .control-dropdown select option { background: var(--card-background-color, #1c1c1e); color: var(--primary-text-color); }
   
-  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
   .spin-animation { animation: spin 2.5s linear infinite; }
-  @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
   .blink { animation: blink 3s infinite; }
-  @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(255, 87, 34, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 87, 34, 0); } }
-  @keyframes pulse-blue { 0% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(0, 191, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0); } }
+
+  @keyframes pulse-red {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    50% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 2px #ff5722); }
+    100% { transform: scale(0.9); opacity: 0.6; }
+  }
+
+  @keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(0, 191, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 191, 255, 0); }
+  }
 `;
