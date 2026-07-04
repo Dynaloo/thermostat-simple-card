@@ -131,12 +131,12 @@ class ThermostatSimpleCard extends LitElement {
         mainIconTooltip += " (Refroidissement actif)";
       }
       if (isHeating) {
-        badgeHtml = html`<div class="heating-badge" title="Activité : Chauffage en cours"></div>`;
+        badgeHtml = html`<ha-icon icon="mdi:fire" class="heating-badge" title="Activité : Chauffage en cours"></ha-icon>`;
         mainIconTooltip += " (Chauffage actif)";
       }
 
     } else {
-      // Logique pour le type d'appareil "heater" (Chauffage classique)
+      // Logique pour l'icône d'état principale (Bandeau du haut - "heater")
       if (mode === "off" || mode === "unknown") {
         mainIcon = mode === "unknown" ? "mdi:cloud-off-outline" : "mdi:radiator-off"; 
         mainIconColor = mode === "unknown" ? "rgba(255, 255, 255, 0.5)" : "rgba(128, 128, 128, 1)"; 
@@ -194,11 +194,11 @@ class ThermostatSimpleCard extends LitElement {
             ? html`
                 <div class="buttons2">
                   <button class="btn ${mode === 'heat' ? 'active-heat' : ''}" title="Allumer le chauffage" @click="${() => this._setHvacMode('heat')}">
-                    <ha-icon icon="mdi:radiator" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
+                    <ha-icon icon="mdi:fire" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                     <span>on</span>
                   </button>
                   <button class="btn ${mode === 'off' ? 'active-off' : ''}" title="Éteindre le chauffage" @click="${() => this._setHvacMode('off')}">
-                    <ha-icon icon="mdi:radiator-off" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
+                    <ha-icon icon="mdi:power" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                     <span>off</span>
                   </button>
                 </div>
