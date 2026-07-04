@@ -25,7 +25,6 @@ class ThermostatSimpleCard extends LitElement {
 
   setConfig(config) {
     if (!config.entity) {
-      // Optionnel mais recommandé : Ne bloque pas l'éditeur mais prévient proprement
       console.warn("Thermostat Simple Card: L'attribut 'entity' est manquant.");
     }
     this.config = config;
@@ -137,20 +136,22 @@ class ThermostatSimpleCard extends LitElement {
       }
 
     } else {
+      // Logique pour le type d'appareil "heater" (Chauffage classique)
       if (mode === "off" || mode === "unknown") {
-        mainIcon = mode === "unknown" ? "mdi:cloud-off-outline" : "mdi:power"; 
-        mainIconColor = "rgba(255, 255, 255, 0.5)"; 
+        mainIcon = mode === "unknown" ? "mdi:cloud-off-outline" : "mdi:radiator-off"; 
+        mainIconColor = mode === "unknown" ? "rgba(255, 255, 255, 0.5)" : "rgba(128, 128, 128, 1)"; 
       } else if (mode === "heat") {
+        mainIcon = "mdi:radiator"; 
         switch (preset) {
-          case "comfort": mainIcon = "mdi:sofa"; mainIconColor = "rgba(255, 165, 0, 1)"; mainIconTooltip = "Preset : Confort"; break;
-          case "eco": mainIcon = "mdi:leaf"; mainIconColor = "rgba(0, 128, 0, 1)"; mainIconTooltip = "Preset : Éco"; break;
-          case "frost": mainIcon = "mdi:snowflake-thermometer"; mainIconColor = "rgba(0, 191, 255, 1)"; mainIconTooltip = "Preset : Hors-gel"; break;
-          case "boost": mainIcon = "mdi:rocket-launch"; mainIconColor = "rgba(255, 0, 0, 1)"; mainIconTooltip = "Preset : Boost"; break;
-          case "none": default: mainIcon = "mdi:hand-back-right-outline"; mainIconColor = "rgba(255, 255, 0, 1)"; mainIconTooltip = "Mode : Manuel"; break;
+          case "comfort": mainIconColor = "rgba(255, 165, 0, 1)"; mainIconTooltip = "Preset : Confort"; break;
+          case "eco": mainIconColor = "rgba(0, 128, 0, 1)"; mainIconTooltip = "Preset : Éco"; break;
+          case "frost": mainIconColor = "rgba(0, 191, 255, 1)"; mainIconTooltip = "Preset : Hors-gel"; break;
+          case "boost": mainIconColor = "rgba(255, 0, 0, 1)"; mainIconTooltip = "Preset : Boost"; break;
+          case "none": default: mainIconColor = "rgba(255, 255, 0, 1)"; mainIconTooltip = "Mode : Manuel"; break;
         }
       }
       if (isHeating) {
-        badgeHtml = html`<div class="heating-badge" title="Activité : En chauffe"></div>`;
+        badgeHtml = html`<ha-icon icon="mdi:fire" class="heating-badge" title="Activité : En chauffe"></ha-icon>`;
         mainIconTooltip += " (En chauffe)";
       }
     }
@@ -193,11 +194,11 @@ class ThermostatSimpleCard extends LitElement {
             ? html`
                 <div class="buttons2">
                   <button class="btn ${mode === 'heat' ? 'active-heat' : ''}" title="Allumer le chauffage" @click="${() => this._setHvacMode('heat')}">
-                    <ha-icon icon="mdi:fire" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
+                    <ha-icon icon="mdi:radiator" class="${mode === 'heat' ? 'blink' : ''}" style="color: ${mode === 'heat' ? 'rgba(255, 0, 0, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                     <span>on</span>
                   </button>
                   <button class="btn ${mode === 'off' ? 'active-off' : ''}" title="Éteindre le chauffage" @click="${() => this._setHvacMode('off')}">
-                    <ha-icon icon="mdi:power" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
+                    <ha-icon icon="mdi:radiator-off" style="color: ${mode === 'off' ? 'rgba(255, 255, 255, 1)' : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                     <span>off</span>
                   </button>
                 </div>
