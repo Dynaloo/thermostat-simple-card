@@ -242,22 +242,23 @@ class ThermostatSimpleCard extends LitElement {
                           let icon = "mdi:help-circle-outline";
                           let color = "rgba(128, 128, 128, 1)";
                           let label = hMode;
+                          let tooltip = hMode;
                           let isFan = false;
                           let isBlink = false;
 
                           switch (hMode) {
-                            case "heat": icon = "mdi:fire"; color = "rgba(255, 100, 0, 1)"; label = "Heat"; break;
-                            case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; isBlink = (mode === "cool"); break;
-                            case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; isFan = (mode === "fan_only"); break;
-                            case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; break;
-                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; break;
-                            case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; break;
+                            case "heat": icon = "mdi:fire"; color = "rgba(255, 100, 0, 1)"; label = "Heat"; tooltip = "Chauffage"; break;
+                            case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; tooltip = "Climatisation (Froid)"; isBlink = (mode === "cool"); break;
+                            case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; tooltip = "Ventilation seule";isFan = (mode === "fan_only"); break;
+                            case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; tooltip = "Déshumidification"; break;
+                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; tooltip = "Automatique"; break;
+                            case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; tooltip = "Éteindre / Arrêt"; break;
                           }
 
                           const isActive = mode === hMode;
 
                           return html`
-                            <button class="btn" title="Mode : ${label}" @click="${() => this._setHvacMode(hMode)}">
+                            <button class="btn" title="Mode : ${tooltip}" @click="${() => this._setHvacMode(hMode)}">
                               <ha-icon icon="${icon}" class="${isFan ? 'spin-animation' : ''} ${isBlink ? 'blink' : ''}" style="color: ${isActive ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                               <span>${label}</span>
                             </button>
