@@ -250,7 +250,7 @@ class ThermostatSimpleCard extends LitElement {
                             case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; tooltip = "Climatisation (Froid)"; isBlink = (mode === "cool"); break;
                             case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; tooltip = "Ventilation seule"; isFan = (mode === "fan_only"); break;
                             case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; tooltip = "Déshumidification"; break;
-                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; tooltip = "Automatique"; break;
+                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; tooltip = "Automatique (Heat/Cool)"; break;
                             case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; tooltip = "Éteindre / Arrêt"; break;
                           }
 
