@@ -136,7 +136,6 @@ class ThermostatSimpleCard extends LitElement {
       }
 
     } else {
-      // Logique pour l'icône d'état principale (Bandeau du haut - "heater")
       if (mode === "off" || mode === "unknown") {
         mainIcon = mode === "unknown" ? "mdi:cloud-off-outline" : "mdi:radiator-off"; 
         mainIconColor = mode === "unknown" ? "rgba(255, 255, 255, 0.5)" : "rgba(128, 128, 128, 1)"; 
@@ -230,7 +229,7 @@ class ThermostatSimpleCard extends LitElement {
                           const isActive = preset === pMode;
 
                           return html`
-                            <button class="btn" title="Passer en mode ${label}" @click="${() => this._setPreset(pMode)}">
+                            <button class="btn" title="Mode : ${label}" @click="${() => this._setPreset(pMode)}">
                               <ha-icon icon="${icon}" style="color: ${isActive ? color : 'rgba(128, 128, 128, 1)'}"></ha-icon>
                               <span>${label}</span>
                             </button>
@@ -249,9 +248,9 @@ class ThermostatSimpleCard extends LitElement {
                           switch (hMode) {
                             case "heat": icon = "mdi:fire"; color = "rgba(255, 100, 0, 1)"; label = "Heat"; tooltip = "Chauffage"; break;
                             case "cool": icon = "mdi:snowflake"; color = "rgba(0, 191, 255, 1)"; label = "Cool"; tooltip = "Climatisation (Froid)"; isBlink = (mode === "cool"); break;
-                            case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; tooltip = "Ventilation seule";isFan = (mode === "fan_only"); break;
+                            case "fan_only": icon = "mdi:fan"; color = "rgba(0, 255, 0, 1)"; label = "Fan"; tooltip = "Ventilation seule"; isFan = (mode === "fan_only"); break;
                             case "dry": icon = "mdi:water-percent"; color = "rgba(0, 128, 128, 1)"; label = "Dry"; tooltip = "Déshumidification"; break;
-                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; tooltip = "Automatique (Heat/Cool)"; break;
+                            case "heat_cool": icon = "mdi:autorenew"; color = "rgba(202, 206, 0, 1)"; label = "Auto"; tooltip = "Automatique"; break;
                             case "off": icon = "mdi:power"; color = "rgba(255, 255, 255, 1)"; label = "Stop"; tooltip = "Éteindre / Arrêt"; break;
                           }
 
