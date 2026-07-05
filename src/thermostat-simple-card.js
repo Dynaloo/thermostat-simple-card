@@ -131,7 +131,7 @@ class ThermostatSimpleCard extends LitElement {
         mainIconTooltip += " (Refroidissement actif)";
       }
       if (isHeating) {
-        badgeHtml = html`<ha-icon icon="mdi:fire" class="heating-badge" title="Activité : Chauffage en cours"></ha-icon>`;
+        badgeHtml = html`<div class="heating-badge" title="Activité : Chauffage en cours"></div>`;
         mainIconTooltip += " (Chauffage actif)";
       }
 
