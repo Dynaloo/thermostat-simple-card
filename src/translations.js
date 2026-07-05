@@ -34,7 +34,7 @@ export const TRANSLATIONS = {
       fan_only: "Ventilation seule",
       dry: "Déshumidification",
       heat_cool: "Automatique",
-      off: "Éteindre / Arrêt"
+      off: "Arrêt"
     }
   },
   en: {
@@ -71,7 +71,7 @@ export const TRANSLATIONS = {
       fan_only: "Fan only",
       dry: "Dry",
       heat_cool: "Auto",
-      off: "Turn off / Stop"
+      off: "Turn off"
     }
   },
   es: {
@@ -108,7 +108,7 @@ export const TRANSLATIONS = {
       fan_only: "Solo ventilador",
       dry: "Deshumidificación",
       heat_cool: "Automático",
-      off: "Apagar / Parar"
+      off: "Parar"
     }
   }
 };
